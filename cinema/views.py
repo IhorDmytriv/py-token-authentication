@@ -4,7 +4,7 @@ from django.db.models import F, Count
 from rest_framework import viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.viewsets import GenericViewSet
 
 from cinema.models import Genre, Actor, CinemaHall, Movie, MovieSession, Order
@@ -34,8 +34,10 @@ class GenreViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
 
     def get_permissions(self):
-        if self.action in ["list", "create"]:
-            return (IsAdminOrIfAuthenticatedReadOnly(),)
+        if self.action == "list":
+            return (IsAuthenticated(),)
+        if self.action == "create":
+            return (IsAdminUser(),)
         return (DenyAllAndRaise404(),)
 
 
@@ -45,8 +47,10 @@ class ActorViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
 
     def get_permissions(self):
-        if self.action in ["list", "create"]:
-            return (IsAdminOrIfAuthenticatedReadOnly(),)
+        if self.action == "list":
+            return (IsAuthenticated(),)
+        if self.action == "create":
+            return (IsAdminUser(),)
         return (DenyAllAndRaise404(),)
 
 
@@ -56,8 +60,10 @@ class CinemaHallViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
 
     def get_permissions(self):
-        if self.action in ["list", "create"]:
-            return (IsAdminOrIfAuthenticatedReadOnly(),)
+        if self.action == "list":
+            return (IsAuthenticated(),)
+        if self.action == "create":
+            return (IsAdminUser(),)
         return (DenyAllAndRaise404(),)
 
 
